@@ -2,9 +2,9 @@ import { Url } from "url"
 
 export const Endpoints  = {
     GraphQL : `http://localhost:${process.env.REACT_APP_GQL_PORT}/graphql`,
-    ProtoBuf : `http://localhost:${process.env.REACT_APP_PROTO_PORT}/`,
-    RestAPI : `http://localhost:${process.env.REACT_APP_REST_PORT}/`,
-    MiddleServer : `http://localhost:${process.env.REACT_APP_MIDDLE_SERVER_PORT}/`,
+    ProtoBuf : `http://localhost:${process.env.REACT_APP_PROTO_PORT}/post`,
+    RestAPI : `http://localhost:${process.env.REACT_APP_REST_PORT}/post`,
+    MiddleServer : `http://localhost:${process.env.REACT_APP_MIDDLE_SERVER_PORT}`,
 }
 
 export enum HttpMethod {
@@ -25,7 +25,7 @@ async function fetchAPI(endpoint: string, query : string | MiddleServerData, met
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({query})
+        body: JSON.stringify(query)
     })
     return response
 }
