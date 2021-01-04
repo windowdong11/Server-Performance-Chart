@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
-import { Endpoints, fetchAPI, HttpMethod } from '../action/fetch'
+import { Endpoints, fetchAPI, HttpMethod, MiddleServerData } from '../action/fetch'
 import Chart from '../components/Chart'
 import InputRightDesc from '../components/InputRightDesc'
 
@@ -61,44 +61,81 @@ enum RequestState {
 
 const GraphServer = () => {
     // input 입력용
-    const [clientCnt, setClientCnt] = useState('')
-    const [duration, setDuration] = useState('')
-    const [arrivalRate, setArrivalRate] = useState('')
+    const [clientCnt, setClientCnt] = useState('5')
+    const [duration, setDuration] = useState('5')
+    const [arrivalRate, setArrivalRate] = useState('5')
+    const [queryId, setQueryId] = useState('')
 
     // 서버 선택 버튼
-    const [selectedServer, setSelectedServer] = useState('1')
-    const buttonOptions = [
-        { name: 'GraphQL', value: '1' },
-        { name: 'ProtoBuf', value: '2' },
-        { name: 'RestAPI', value: '3' },
+    const [selectedServer, setSelectedServer] = useState('0')
+    const serverOptions = [
+        { name: 'GraphQL', value: '0', midUrl: Endpoints.MiddleServer + '/gql', originUrl: Endpoints.GraphQL },
+        { name: 'ProtoBuf', value: '1', midUrl: Endpoints.MiddleServer + '/protobuf', originUrl: Endpoints.ProtoBuf },
+        { name: 'RestAPI', value: '2', midUrl: Endpoints.MiddleServer + '/rest', originUrl: Endpoints.RestAPI },
+    ]
+
+    // 쿼리옵션 선택 버튼
+    const [selectedQuery, setSelectedQuery] = useState('0')
+    const queryOptions = [
+        { name: 'All', value: '0' },
+        { name: 'ById', value: '1' },
     ]
 
     // 테스트 버튼
     const onTest = () => {
-        console.log("Todo 1 : Send request when click Test button.")
+        const optionIdx = parseInt(selectedServer)
+        const detailUrl = `/${selectedQuery ==='0' ? 'all' : queryId}`
+        const midServerAddress = serverOptions[optionIdx].midUrl + detailUrl
+        const requestData: MiddleServerData = {
+            address: serverOptions[optionIdx].originUrl + detailUrl,
+            arrivalRate: arrivalRate,
+            clientCount: clientCnt,
+            duration: duration,
+        }
+        fetchAPI(midServerAddress, requestData, HttpMethod.Post)
+            .then(response => {
+                console.log('response')
+                console.log(response)
+                console.log('Todo2 : Handle response, refine it to graph data.')
+            })
+            .catch(error => {
+                console.log('response error while requesting to midServer in [Performance" page, "test" button]')
+                console.log(error)
+            })
+        console.log("Todo 1 : Send request when click Test button. <Done>")
         console.log("Todo 2 : Change response to graph data.")
         console.log("Todo 3 : Display Chart with graph data.")
     }
 
     return (
         <Container>
-            <Row xl={{cols: 2}} lg={{cols: 1}}>
-                <Col xl={{span: 9}}>
-                    <Chart title={"Performance"} data={testData} />
+            <Row>
+                <h1>Performance</h1>
+            </Row>
+            <Row xl={{ cols: 2 }} lg={{ cols: 1 }}>
+                <Col xl={{ span: 9 }}>
+                    <Chart data={testData} />
                 </Col>
-                <Col xl={{span: 3}} lg={{span: 5}} md={{span: 5}} sm={{span: 5}} xs={{span: 5}}>
+                <Col xl={{ span: 3 }} lg={{ span: 5 }} md={{ span: 5 }} sm={{ span: 5 }}>
                     <RequestOptions clientCnt={clientCnt} clientCntOnChange={(e) => { setClientCnt(e.target.value) }}
-                        duration={duration} durationOnChange={(e) => { setDuration(e.target.value)}}
-                        arrivalRate={arrivalRate} arrivalRateOnChange={(e)=> {setArrivalRate(e.target.value)}}>
-                        <OptionButton options={buttonOptions} selectedValue={selectedServer}
-                            onChange={(e) => { setSelectedServer(e.target.value) }}></OptionButton>
+                        duration={duration} durationOnChange={(e) => { setDuration(e.target.value) }}
+                        arrivalRate={arrivalRate} arrivalRateOnChange={(e) => { setArrivalRate(e.target.value) }}>
+                        <>
+                            <OptionButton options={serverOptions} selectedValue={selectedServer}
+                                onChange={(e) => { setSelectedServer(e.target.value) }}></OptionButton>
+                            <OptionButton options={queryOptions} selectedValue={selectedQuery}
+                                onChange={(e) => { setSelectedQuery(e.target.value) }}></OptionButton>
+                            {selectedQuery !== '0' &&
+                                <InputRightDesc value={queryId} onChange={e => setQueryId(e.target.value)} description="ID" />
+                            }
+                        </>
                     </RequestOptions>
+                    <Button variant="dark" block onClick={onTest}>Test</Button>
+                </Col>
+                <Col>
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    <Button variant="dark" block onClick={onTest}>Test</Button>
-                </Col>
             </Row>
         </Container>
     )
