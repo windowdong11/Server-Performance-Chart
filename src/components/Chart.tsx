@@ -1,10 +1,6 @@
 import React from 'react'
 import { Line } from 'react-chartjs-2'
 
-interface ChartProps {
-    title: string
-    data : ChartData
-}
 interface ChartData {
     labels: string[],
     datasets : Array<{
@@ -15,6 +11,9 @@ interface ChartData {
         borderColor: string
         showLine?: boolean
     }>
+}
+interface ChartProps {
+    data : ChartData
 }
 
 const options = {
@@ -29,10 +28,9 @@ const options = {
     },
 }
 
-export default function Chart({ title, data }: ChartProps) {
+export default function Chart({ data }: ChartProps) {
     return (
     <>
-        <h1>{title}</h1>
         <Line data={data} options={options} />
     </>
     )
