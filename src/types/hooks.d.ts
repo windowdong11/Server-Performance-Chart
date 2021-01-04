@@ -1,0 +1,1 @@
+type useStateFunc<T> = (value: React.SetStateAction<T>) => void
