@@ -5,7 +5,6 @@ import InputRightDesc from "./InputRightDesc"
 import OptionButton from "./OptionButton"
 
 interface RequestOptionsProps {
-    style?: RowProps,
     children?: ReactChild,
     clientCnt: string,
     clientCntOnChange: React.ChangeEventHandler<HTMLInputElement>,
@@ -21,22 +20,13 @@ interface RequestOptionsProps {
      */
 }
 
-export default function RequestOptions({style, children, clientCnt, clientCntOnChange, duration, durationOnChange, arrivalRate, arrivalRateOnChange} : RequestOptionsProps) {
+export default function RequestOptions({children, clientCnt, clientCntOnChange, duration, durationOnChange, arrivalRate, arrivalRateOnChange }: RequestOptionsProps) {
     return (
-        <Container>
+        <>
+            <InputRightDesc description="clients" onChange={clientCntOnChange} value={clientCnt} />
+            <InputRightDesc description="duration" onChange={durationOnChange} value={duration} />
+            <InputRightDesc description="arrival rate" onChange={arrivalRateOnChange} value={arrivalRate} />
             {children}
-            <Row {...style}>
-                <Col>
-                    <InputRightDesc description="clients" onChange={clientCntOnChange} value={clientCnt} />
-                    <InputRightDesc description="duration" onChange={durationOnChange} value={duration}/>
-                    <InputRightDesc description="arrival rate" onChange={arrivalRateOnChange} value={arrivalRate} />
-                </Col>
-            </Row>
-            {/* <Row>
-                <Col md={{ span: 4, offset: 6 }}>
-                    <OptionButton options={buttonOptions} onChange={(e: buttonChange) => setSelectedServer(e.target.value)} selectedValue={selectedServer} />
-                </Col>
-            </Row> */}
-        </Container>
+        </>
     )
 }
