@@ -14,12 +14,12 @@ export enum HttpMethod {
 
 export interface MiddleServerData {
     address: string,
-    duration: number,
-    arrivalRate: number,
-    clientCount: number,
+    duration: number | string,
+    arrivalRate: number | string,
+    clientCount: number | string,
 }
 
-async function fetchAPI(endpoint: string, query : string, method: HttpMethod) {
+async function fetchAPI(endpoint: string, query : string | MiddleServerData, method: HttpMethod) {
     const response = await fetch(endpoint, {
         method: method,
         headers: {
