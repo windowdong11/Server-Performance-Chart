@@ -1,4 +1,4 @@
-interface Artillery {
+interface Artillery  {
     "aggregate": {
         "timestamp": "2021-01-06T15:11:53.401Z",
         "scenariosCreated": 1,
@@ -73,9 +73,7 @@ interface Artillery {
                 "200": 1
             },
             "matches": 0,
-            "latencies": [
-                10671459
-            ],
+            "latencies": number[],
             "customStats": {},
             "counters": {},
             "concurrency": 0,

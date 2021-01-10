@@ -14,6 +14,7 @@
     "chart.js": "^2.9.4",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
+    "react-bootstrap-range-slider": "^2.0.2",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-bootstrap-range-slider": "^1.2.0"
   }
 }

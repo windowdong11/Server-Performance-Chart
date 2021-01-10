@@ -19,15 +19,18 @@ export interface MiddleServerData {
     clientCount: number | string,
 }
 
-async function fetchAPI(endpoint: string, query : string | MiddleServerData, method: HttpMethod) {
-    const response = await fetch(endpoint, {
+function fetchAPI<T>(endpoint: string, query : string | MiddleServerData, method: HttpMethod) : Promise<T>{
+    return fetch(endpoint, {
         method: method,
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(query)
     })
-    return response
+    .then((res) => {
+        return res.json() as Promise<T>
+    }
+    )
 }
 
 export {fetchAPI}
